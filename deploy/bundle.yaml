@@ -26,7 +26,7 @@ subjects:
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: yunjiasu-chenyroger
+  name: yunjiasu-deploy
   namespace: default
 data:
   config.yaml: |-
@@ -60,7 +60,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: yunjiasu-chenyroger
+            name: yunjiasu-deploy
             defaultMode: 420
       containers:
         - name: yunjiasu
