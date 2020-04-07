@@ -294,7 +294,11 @@ func (y *yunjiasu) CheckCerts() {
   wg.Add(len(y.certs))
   for _, v := range y.certs {
     go func(cert yunjiasuCert) {
-      defer wg.Done()
+      defer func() {
+        klog.Infof("[CheckCerts] checking %s finished",cert.TlsName)
+        wg.Done()
+      }()
+      klog.Infof("[CheckCerts] checking %s",cert.TlsName)
       if v.ExpiresOn.Before(v.TlsNotAfter) {
         var err error
         for i := 0; i < y.cfg.Common.SyncRetryTimes; i++ {
@@ -395,7 +399,6 @@ func (y *yunjiasu) SyncYunjiasuCerts() {
         if err != nil {
           klog.Errorf("[SyncYunjiasuCerts] %s", err.Error())
         }
-        klog.Infof("body %s", body)
         if err == nil {
           err = json.Unmarshal(body, &resp)
           if err != nil {

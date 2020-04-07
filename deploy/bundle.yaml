@@ -22,7 +22,38 @@ subjects:
   - kind: ServiceAccount
     name: default
     namespace: default
-  - kind: ServiceAccount
-    name: cert-manager
-    namespace: cert-manager
 ---
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: yunjiasu-deploy
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: yunjiasu-deploy
+  template:
+    metadata:
+      labels:
+        app: yunjiasu-deploy
+    spec:
+      volumes:
+        - name: config
+          configMap:
+            name: yunjiasu-chenyroger
+            defaultMode: 420
+      containers:
+        - name: yunjiasu
+          image: 'ccr.ccs.tencentyun.com/astatium.com/yunjiasu'
+          resources: {}
+          volumeMounts:
+            - name: config
+              mountPath: /mnt/config.yaml
+              subPath: config.yaml
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      nodeSelector:
+        kubernetes.io/hostname: baidu-bj
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
