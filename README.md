@@ -1,2 +1,9 @@
 # yunjiasu-deploy-ssl
-auto deploy new certs to baidu yunjiasu in k8s
+automatic deploy new certificates to baidu yunjiasu in kubernetes
+
+
+## Install webhook
+
+  ```bash
+  kubectl apply -f https://raw.githubusercontent.com/chenyu116/yunjiasu-deploy-ssl/master/deploy/bundle.yaml
+  ```
