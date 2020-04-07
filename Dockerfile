@@ -18,7 +18,9 @@ RUN CGO_ENABLED=0 go build -o webhook -ldflags '-w -extldflags "-static"' .
 
 FROM ccr.ccs.tencentyun.com/astatium.com/alpine:3.11.5
 
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone \
+    && apk del tzdata
 
 COPY --from=build /mnt/webhook /usr/local/bin/webhook
 

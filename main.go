@@ -20,14 +20,13 @@ func main() {
 	}
 
 	if len(cfg.Certs) == 0 {
-		klog.Fatal("need certs for sync")
+		klog.Fatal("need certificates")
 	}
 
 	k8sConfig, err := rest.InClusterConfig()
 	if err != nil {
 		klog.Fatal(err)
 	}
-	// creates the clientset
 	clientSet, err := kubernetes.NewForConfig(k8sConfig)
 	if err != nil {
 		klog.Fatal(err)
@@ -40,7 +39,9 @@ func main() {
 			y.SyncYunjiasuCerts()
 			y.SyncK8sCerts()
 			y.CheckCerts()
+			y.Reset()
 			y.Stop()
+			klog.Infof("next check after %s",cfg.Common.CheckInterval)
 		}
 
 		time.Sleep(cfg.Common.CheckInterval)

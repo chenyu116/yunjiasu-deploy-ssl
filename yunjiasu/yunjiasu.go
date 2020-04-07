@@ -71,7 +71,7 @@ func NewYunjiasu(cfg config.Config) *yunjiasu {
   if cfg.Common.SignatureMethod == "" {
     cfg.Common.SignatureMethod = SIGN_METHOD
   }
-  return &yunjiasu{cfg: cfg, certs: make(map[string]yunjiasuCert, 1)}
+  return &yunjiasu{cfg: cfg, certs: make(map[string]yunjiasuCert, len(cfg.Certs))}
 }
 
 type yunjiasuCert struct {
@@ -342,6 +342,7 @@ func (y *yunjiasu) CheckCerts() {
     }(v)
   }
   wg.Wait()
+  klog.Info("[CheckCerts] finished")
 }
 
 func (y *yunjiasu) SyncK8sCerts() {
@@ -371,6 +372,9 @@ func (y *yunjiasu) SyncK8sCerts() {
   klog.Info("[SyncK8sCerts] k8s certs synchronized")
 }
 
+func (y *yunjiasu) Reset() {
+  y.certs = make(map[string]yunjiasuCert,len(y.cfg.Certs))
+}
 func (y *yunjiasu) SyncYunjiasuCerts() {
   klog.Info("[SyncYunjiasuCerts] synchronize yunjiasu certs")
   var wg sync.WaitGroup
