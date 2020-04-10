@@ -299,7 +299,7 @@ func (y *yunjiasu) CheckCerts() {
         wg.Done()
       }()
       klog.Infof("[CheckCerts] checking %s",cert.TlsName)
-      if v.ExpiresOn.Before(v.TlsNotAfter) {
+      if cert.ExpiresOn.Before(cert.TlsNotAfter) {
         var err error
         for i := 0; i < y.cfg.Common.SyncRetryTimes; i++ {
           if cert.Status&STATUS_UPLOADED == 0 {
