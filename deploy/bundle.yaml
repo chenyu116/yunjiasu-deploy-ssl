@@ -64,7 +64,7 @@ spec:
             defaultMode: 420
       containers:
         - name: yunjiasu
-          image: 'ccr.ccs.tencentyun.com/astatium.com/yunjiasu'
+          image: 'registry.cn-shanghai.aliyuncs.com/astat/yunjiasu'
           resources: {}
           volumeMounts:
             - name: config
