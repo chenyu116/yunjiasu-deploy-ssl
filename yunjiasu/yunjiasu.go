@@ -326,7 +326,7 @@ func (y *yunjiasu) CheckCerts() {
             }
             cert.Status = cert.Status | STATUS_DELETED
           }
-          if v.Status&STATUS_RENAMED == 0 {
+          if cert.Status&STATUS_RENAMED == 0 {
             err = y.renameYunjiasuCert(cert)
             if err != nil {
               klog.Errorf("[%s > %s] renameYunjiasuCert: %s", cert.Domain, cert.TlsName, err.Error())
