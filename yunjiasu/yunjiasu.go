@@ -373,6 +373,7 @@ func (y *yunjiasu) SyncK8sCerts() {
 }
 
 func (y *yunjiasu) Reset() {
+  klog.Info("[Reset] certificates")
   y.certs = make(map[string]yunjiasuCert,len(y.cfg.Certs))
 }
 func (y *yunjiasu) SyncYunjiasuCerts() {
