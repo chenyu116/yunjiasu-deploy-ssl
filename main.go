@@ -5,23 +5,27 @@ import (
 	"github.com/chenyu116/yunjiasu-deploy-ssl/yunjiasu"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
-	"k8s.io/klog"
+	"k8s.io/klog/v2"
+	"os"
 	"time"
 )
 
 func main() {
+	accessKey := os.Getenv("ACCESS_KEY")
+	secretKey := os.Getenv("SECRET_KEY")
+	if accessKey == "" {
+		klog.Fatal("need ENV ACCESS_KEY")
+	}
+	if secretKey == "" {
+		klog.Fatal("need ENV SECRET_KEY")
+	}
 	config.ReadConfig()
 	cfg := config.GetConfig()
-	if cfg.Secret.AccessKey == "" {
-		klog.Fatal("need accessKey")
-	}
-	if cfg.Secret.SecretKey == "" {
-		klog.Fatal("need secretKey")
-	}
-
 	if len(cfg.Certs) == 0 {
-		klog.Fatal("need certificates")
+		klog.Fatal("no certificates")
 	}
+	cfg.Secret.AccessKey = accessKey
+	cfg.Secret.SecretKey = secretKey
 
 	k8sConfig, err := rest.InClusterConfig()
 	if err != nil {
@@ -41,7 +45,7 @@ func main() {
 			y.CheckCerts()
 			y.Reset()
 			y.Stop()
-			klog.Infof("next check after %s",cfg.Common.CheckInterval)
+			klog.Infof("next check after %s", cfg.Common.CheckInterval)
 		}
 
 		time.Sleep(cfg.Common.CheckInterval)

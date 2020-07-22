@@ -1,26 +1,30 @@
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
   name: yunjiasu-secret
-  namespace: default
 rules:
   - apiGroups: [""]
     resources: ["secrets"]
-    verbs: ["get", "list", "watch"]
+    verbs: ["get", "update","create","delete","list"]
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+apiVersion: v1
+kind: ServiceAccount
 metadata:
   name: yunjiasu-secret
   namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: yunjiasu-secret
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: yunjiasu-secret
 subjects:
   - kind: ServiceAccount
-    name: default
+    name: yunjiasu-secret
     namespace: default
 ---
 kind: ConfigMap
@@ -30,13 +34,11 @@ metadata:
   namespace: default
 data:
   config.yaml: |-
-    secret:
-      accessKey:
-      secretKey:
     certs:
       - domain: astat.cn
         tlsName: star-astat-cn # your k8s secret name
         tlsNamespace: default
+        syncToNamespace: [] # sync this cert to other namespace secret
     common:
       baseURL: 'https://api.su.baidu.com/'
       signatureMethod: HMAC-SHA1
@@ -64,16 +66,15 @@ spec:
             defaultMode: 420
       containers:
         - name: yunjiasu
-          image: 'registry.cn-shanghai.aliyuncs.com/astat/yunjiasu'
-          resources: {}
+          image: 'registry.cn-shanghai.aliyuncs.com/astat/yunjiasu:latest'
           volumeMounts:
             - name: config
               mountPath: /mnt/config.yaml
               subPath: config.yaml
           terminationMessagePolicy: File
           imagePullPolicy: Always
-      nodeSelector:
-        kubernetes.io/hostname: baidu-bj
+      serviceAccountName: yunjiasu-secret
+      serviceAccount: yunjiasu-secret
       tolerations:
         - key: node-role.kubernetes.io/master
           effect: NoSchedule

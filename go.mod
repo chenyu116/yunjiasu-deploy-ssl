@@ -11,7 +11,9 @@ require (
 	github.com/spf13/viper v1.6.2
 	github.com/streadway/amqp v0.0.0-20200108173154-1c71cc93ed71 // indirect
 	google.golang.org/grpc v1.28.0 // indirect
+	k8s.io/api v0.17.0
 	k8s.io/apimachinery v0.17.0
 	k8s.io/client-go v0.17.0
 	k8s.io/klog v1.0.0
+	k8s.io/klog/v2 v2.3.0
 )
