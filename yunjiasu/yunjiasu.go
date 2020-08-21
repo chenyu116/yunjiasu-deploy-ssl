@@ -228,6 +228,7 @@ func (y *yunjiasu) deleteYunjiasuCert(cert yunjiasuCert) error {
 	var resp yunjiasuResponse_custom_certificate
 	err = json.Unmarshal(body, &resp)
 	if err != nil {
+		klog.Errorf("[deleteYunjiasuCert] Unmarshal: %s",body)
 		return err
 	}
 	return nil
@@ -247,6 +248,7 @@ func (y *yunjiasu) renameYunjiasuCert(cert yunjiasuCert) error {
 	var resp yunjiasuResponse_custom_certificate
 	err = json.Unmarshal(body, &resp)
 	if err != nil {
+		klog.Errorf("[renameYunjiasuCert] Unmarshal: %s",body)
 		return err
 	}
 	return nil
@@ -266,6 +268,7 @@ func (y *yunjiasu) deployYunjiasuCert(cert yunjiasuCert) error {
 	var resp yunjiasuResponse_custom_certificate
 	err = json.Unmarshal(body, &resp)
 	if err != nil {
+		klog.Errorf("[deployYunjiasuCert] Unmarshal: %s",body)
 		return err
 	}
 	return nil
@@ -285,6 +288,7 @@ func (y *yunjiasu) uploadYunjiasuCert(cert yunjiasuCert) error {
 	var resp yunjiasuResponse_custom_certificate
 	err = json.Unmarshal(body, &resp)
 	if err != nil {
+		klog.Errorf("[uploadYunjiasuCert] Unmarshal: %s",body)
 		return err
 	}
 	return nil
