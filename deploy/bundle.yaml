@@ -45,7 +45,7 @@ data:
       checkInterval:  2h # two hours
       syncRetryTimes: 3
 ---
-kind: DaemonSet
+kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: yunjiasu-deploy
@@ -66,7 +66,7 @@ spec:
             defaultMode: 420
       containers:
         - name: yunjiasu
-          image: 'registry.cn-shanghai.aliyuncs.com/astat/yunjiasu:latest'
+          image: 'ccr.ccs.tencentyun.com/astatium.com/yunjiasu:1.3'
           volumeMounts:
             - name: config
               mountPath: /mnt/config.yaml
